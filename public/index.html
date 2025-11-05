@@ -1,12 +1,33 @@
-<script src="https://www.paypal.com/sdk/js?client-id=1434190003059298417&vault=true&intent=subscription"></script>
-<div id="paypal-button"></div>
-<script>
-  const token = new URLSearchParams(location.search).get("token");
-  paypal.Buttons({
-    createSubscription: (data, actions) => actions.subscription.create({
-      plan_id: "YOUR_PLAN_ID",
-      custom_id: token
-    }),
-    onApprove: () => location.href="/thanks.html"
-  }).render('#paypal-button');
-      </script>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>BLAZE Premium</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Sandbox-Client-ID für Tests einsetzen; später Live-Client-ID -->
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&vault=true&intent=subscription"></script>
+  </head>
+  <body>
+    <h1>BLAZE Premium</h1>
+    <p>Bitte Discord im Bot verknüpfen, dann hier bezahlen.</p>
+    <div id="paypal-button"></div>
+    <script>
+      // Claim-Token aus URL holen: https://dein-name.pages.dev/?token=ABC123
+      const token = new URLSearchParams(location.search).get("token");
+      if (!token) alert("Missing token. Please start from /premium link in Discord.");
+
+      paypal.Buttons({
+        createSubscription: (data, actions) => {
+          return actions.subscription.create({
+            plan_id: "YOUR_PAYPAL_PLAN_ID", // z.B. 3,99 €/Monat (Sandbox)
+            custom_id: token // WICHTIG: ordnet Zahlung deinem Discord-User zu
+          });
+        },
+        onApprove: () => {
+          alert("Thanks! Payment approved. You can close this page.");
+          location.href = "/"; // optional
+        }
+      }).render("#paypal-button");
+    </script>
+  </body>
+</html>
