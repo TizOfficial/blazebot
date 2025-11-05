@@ -1,0 +1,12 @@
+<script src="https://www.paypal.com/sdk/js?client-id=1434190003059298417&vault=true&intent=subscription"></script>
+<div id="paypal-button"></div>
+<script>
+  const token = new URLSearchParams(location.search).get("token");
+  paypal.Buttons({
+    createSubscription: (data, actions) => actions.subscription.create({
+      plan_id: "YOUR_PLAN_ID",
+      custom_id: token
+    }),
+    onApprove: () => location.href="/thanks.html"
+  }).render('#paypal-button');
+      </script>
